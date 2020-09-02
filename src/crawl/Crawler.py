@@ -1,15 +1,17 @@
 from bs4 import BeautifulSoup
 import urllib
+import urllib.request
 import os
 import time
 import random
 
-urlDict = {"pvldb12" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb12.html",
-       "pvldb11" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb11.html",
-       "pvldb10" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb10.html",
-       "pvldb9" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb9.html",
-       "pvldb8" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb8.html",
-       "pvldb7" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb7.html"}
+urlDict = {"pvldb13" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb13.html",
+"pvldb12" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb12.html",
+"pvldb11" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb11.html",
+"pvldb10" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb10.html",
+"pvldb9" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb9.html",
+"pvldb8" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb8.html",
+"pvldb7" : "https://dblp.uni-trier.de/db/journals/pvldb/pvldb7.html"}
 
 count = 0
 
@@ -32,18 +34,12 @@ def collectLink(url, fileName):
     with open("./vldb/" + fileName +"/" + fileName +".txt", "w+") as linkFile:
         print(len(pdfLinkSet))
         for item in pdfLinkSet:
-            time.sleep(random.randint(5,10))
+            # time.sleep(random.randint(5,10))
             global count
             count = count+1
-            print("Downloading "+str(count)+"th of 1314 files...")
-            download("./"+fileName, item)
+            print("Downloading "+str(count)+"th of "+ str(len(pdfLinkSet)) +" files...")
+            download("./vldb/"+fileName, item)
             linkFile.write(item + "\n")
-
-def getAllPdfFiles(urlDict: dict):
-    for key, value in urlDict.items():
-        volName = key
-        url = value
-        collectLink(url, volName)
 
 def download(targetDir, url):
     filePath = targetDir+ "/" + os.path.basename(url)
@@ -56,6 +52,12 @@ def download(targetDir, url):
     except Exception as e:
         with open("./failedRecord.txt", "w+") as failRecord:
             failRecord.write(url)
+
+def getAllPdfFiles(urlDict: dict):
+    for key, value in urlDict.items():
+        volName = key
+        url = value
+        collectLink(url, volName)
 
 if __name__ == '__main__':
     getAllPdfFiles(urlDict)
