@@ -21,18 +21,17 @@ def _Hamming_distance(hash1, hash2):
             num += 1
     return num
 
-if __name__ == "__main__":
-    image1 = Image.open('./image1.png')
-    image2 = Image.open('./image2.jpg')
-
-    image1 = np.array(image1.resize((8,8), Image.ANTIALIAS).convert('L'), 'f')
-    image2 = np.array(image2.resize((8,8), Image.ANTIALIAS).convert('L'), 'f')
+    # image1 = Image.open('./image1.png')
+    # image2 = Image.open('./image2.jpg')
+def getSimilarity(image1, image2):
+    image1 = np.array(image1.resize((8, 8), Image.ANTIALIAS).convert('L'), 'f')
+    image2 = np.array(image2.resize((8, 8), Image.ANTIALIAS).convert('L'), 'f')
 
     hash1 = _aHash(image1)
     hash2 = _aHash(image2)
 
     dist = _Hamming_distance(hash1, hash2)
 
-    similarity = 1 - dist*1.0/64
+    similarity = 1 - dist * 1.0 / 64
 
-    print(str(similarity))
+    return similarity
