@@ -1,22 +1,22 @@
-# import sys
 import os
-# import json
 import dlib
 import numpy as np
 import cv2
 from PIL import Image
 import time
 
-
-MODEL_DIR = "./"
+rootPath = os.path.abspath("D:/PySpace/PyUtils")
+dataPath = os.path.join(rootPath, "DataResource/facedata")
+modelDirPath = os.path.join(dataPath, "models")
 
 # # 使用传统的HOG特征+级联分类的方法 进行人脸识别
 detector = dlib.get_frontal_face_detector()
 
 sp = dlib.shape_predictor(os.path.join(
-    MODEL_DIR, "shape_predictor_68_face_landmarks.dat"))
+    modelDirPath, "shape_predictor_68_face_landmarks.dat"))
 face_rec = dlib.face_recognition_model_v1(os.path.join(
-    MODEL_DIR, "dlib_face_recognition_resnet_model_v1.dat"))
+    modelDirPath, "dlib_face_recognition_resnet_model_v1.dat"))
+
 
 def getImageFromFile(filePath, mode="RGB")->"numpy.array or None":
     try:
@@ -99,23 +99,8 @@ def is_face_in_photo(face_req_file, photo_req_file) -> bool:
     else:
         return False
 
-
-print(is_face_in_photo("./Albert_Costa_0001.jpg", "./Albert_Costa_0002.jpg"))
-# def is_face_in_photo(face_req_file: "UploadedFile", photo_req_file: "UploadedFile") -> bool:
-#     """判断<face_req_file>图片中的人脸是否在<photo_req_file>图片中:
-#         如果存在相似度大于0.5 的，则认为是同一个人脸
-#     """
-#     face_img_array = load_image_from_request_file(face_req_file)
-#     photo_img_array = load_image_from_request_file(photo_req_file)
-#
-#     faces = extract_faces_feature(face_img_array)
-#     photo_faces = extract_faces_feature(photo_img_array)
-#     if len(faces) == 0 or len(photo_faces) == 0:
-#         return False
-#     distances = compute_distance_of_features(faces[:1], photo_faces)
-#     similarities = 1 - distances
-#     sim = max(similarities)
-#     if sim > 0.5:
-#         return True
-#     else:
-#         return False
+def getAllImageFiles(path):
+    pathList = []
+    for i in os.listdir(path):
+        pathList.append(os.path.join(path, i))
+    return pathList
