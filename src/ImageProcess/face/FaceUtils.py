@@ -104,3 +104,7 @@ def getAllImageFiles(path):
     for i in os.listdir(path):
         pathList.append(os.path.join(path, i))
     return pathList
+
+image1 = getImageFromFile("C:\\Users\\dell\\Desktop\\1.jpg")
+image2 = getImageFromFile("C:\\Users\\dell\\Desktop\\2.jpg")
+compute_face_similarity(image1, image2)

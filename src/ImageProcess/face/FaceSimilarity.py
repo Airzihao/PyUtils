@@ -38,11 +38,11 @@ def findMostSimilar(targetFeature, faceFeaturesDict):
 
 def main():
     time0 = time.time()
-    # imageNumpyArrayDict = loadAlldata()
+    imageNumpyArrayDict = loadAlldata()
     time1 = time.time()
-    # faceFeaturesDict = extractAllFeatures(imageNumpyArrayDict)
+    faceFeaturesDict = extractAllFeatures(imageNumpyArrayDict)
     # np.save("./feature.npy", faceFeaturesDict)
-    faceFeaturesDict = np.load("./feature.npy").item()
+    # faceFeaturesDict = np.load("./feature.npy").item()
     time2 = time.time()
     targetFeature = FaceUtils.extract_faces_feature(FaceUtils.getImageFromFile(tarFilePath))
     time3 = time.time()
