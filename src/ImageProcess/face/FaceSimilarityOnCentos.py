@@ -2,9 +2,19 @@ import os
 import numpy as np
 import sys
 import time
-#import ImageProcess.face.FaceUtils as FaceUtils
 import dlib
 from PIL import Image
+import cv2
+
+confFilePath = os.path.abspath("/aipm/conf")
+
+def init(confDict):
+    with open(confFilePath, "r", encoding='utf-8') as conf:
+        for line in conf:
+            (key, value) = line.replace(" ", "").split("=")
+            confDict[key] = value
+
+
 
 modelDirPath = "/home/PyUtils/DataResource/facedata/models/"
 def loadAlldata(imageFilePathList):
