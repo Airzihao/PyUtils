@@ -1,3 +1,4 @@
+import time
 # This the the property graph format script for PandaDB-v0.3 test
 # source node format: id(long)
 # target neo4j node format: id_s(long), label(str), id_p(long),idStr(string),flag(bool)
@@ -15,12 +16,15 @@ def id2str(id) -> str:
         id = int(id / 10)
     return "".join(reversed(idStr))
 
-def wrapNode(nodePath:str):
+def wrapPandaNode(nodePath:str):
+    with open(nodeHeadPath, mode="w+", encoding='utf-8') as target:
+        head = "id_s:ID,label:LABEL,id_p:long,idStr:string,flag:boolean\n"
+        target.write(head)
     with open(nodePath, mode="r", encoding='utf-8') as source:
-        with open(nodePath+"-wrapped.csv", mode="w+", encoding='utf-8') as target:
-            head = "id_s:ID,label:LABEL,id_p:long,idStr:string,flag:boolean\n"
-            target.write(head)
+        with open(targetNodePath, mode="w+", encoding='utf-8') as target:
+            i = 0
             for item in source:
+                if (i % pow(10, 7) == 0): print("{}% nodes generated.".format(i / pow(10, 7))); i += 1
                 id = int(item)
                 id_s = id
                 node_label = "label"+str(id%10)
@@ -30,45 +34,76 @@ def wrapNode(nodePath:str):
                 line = "{},{},{},\"{}\",{}\n".format(id_s, node_label, id_p, idStr, flag)
                 target.write(line)
 
-def wrapEdge(edgePath:str):
+# def wrapPandaEdge(edgePath:str):
+#     with open(edgePath, mode='r', encoding='utf-8') as source:
+#         with open(edgePath+"-wrapped.csv", mode="w+", encoding='utf-8') as target:
+#             head = "fromId:START_ID,type:TYPE,toId:END_ID,fromId_num:long,toId_str,weight:int\n"
+#             target.write(head)
+#             # for i in range(100):
+#             i = 0
+#             for item in source:
+#                 if (i % pow(10, 7) == 0): print("{}% nodes generated.".format(i / pow(10, 7)))
+#                 s_line = item.replace("\n", "").split("\t")
+#                 # s_line = source.readline().replace("\n", "").split("\t")
+#                 fromId = int(s_line[0])
+#                 edgeType = "type" + str(fromId % 10)
+#                 toId = int(s_line[1])
+#                 fromId_p = fromId
+#                 toId_p = str(toId)
+#                 category = fromId%10
+#                 line = "{},\"{}\",{},{},\"{}\",{}\n".format(fromId, edgeType, toId, fromId_p, toId_p, category)
+#                 target.write(line)
+
+def wrapPandaEdge(edgePath:str):
+    with open(edgeHeadPath, mode="w+", encoding='utf-8') as target:
+        head = "relId,fromId:START_ID,toId:END_ID,type:TYPE,fromId_num:long,toId_str,weight:int\n"
+        target.write(head)
     with open(edgePath, mode='r', encoding='utf-8') as source:
-        with open(edgePath+"-wrapped.csv", mode="w+", encoding='utf-8') as target:
-            head = "fromId:START_ID,type:TYPE,toId:END_ID,fromId_num:long,toId_str,weight:int\n"
-            target.write(head)
-            # for i in range(100):
+        with open(targetEdgePath, mode="w+", encoding='utf-8') as target:
+            relId = 0
+            i = 0
             for item in source:
-                s_line = item.replace("\n", "").split("\t")
-                # s_line = source.readline().replace("\n", "").split("\t")
+                if (i % pow(10, 7) == 0): print("{}% edges generated.".format(i * 0.5 / pow(10, 7))); i += 1
+                s_line = item.replace("\n", "").split(",")
                 fromId = int(s_line[0])
                 edgeType = "type" + str(fromId % 10)
                 toId = int(s_line[1])
                 fromId_p = fromId
                 toId_p = str(toId)
                 category = fromId%10
-                line = "{},\"{}\",{},{},\"{}\",{}\n".format(fromId, edgeType, toId, fromId_p, toId_p, category)
+                line = "{},{},{},{},{},{},{}\n".format(relId, fromId, toId, edgeType, fromId_p, toId_p, category)
                 target.write(line)
+                relId += 1
 
 
-
-
-edgePath = "D:\\dataset\\graph500-22"
-nodePath = "D:\\dataset\\graph500-22_unique_node"
-
+srcNodePath = "./nodes-1B.csv"
+srcEdgePath = "./edges-1B.csv"
+targetNodePath = "G://dataset//nodes-1B-wrapped.csv"
+nodeHeadPath = "G://dataset//nodes-1B-wrapped-head.csv"
+targetEdgePath = "G://dataset//edges-1B-wrapped.csv"
+edgeHeadPath = "G://dataset//edges-1B-wrapped-head.csv"
 
 def main():
-    print("wrapping nodes\n")
-    wrapNode("D:\\dataset\\graph500-22_unique_node")
-    with open(nodePath+"-wrapped.csv") as nodeFile:
+    print("-------start to wrap nodes----------")
+    localtime1 = time.asctime(time.localtime(time.time()))
+    wrapPandaNode(srcNodePath)
+    with open(targetNodePath) as nodeFile:
         print("wrapped node file:\n")
         for i in range(10):
             print(nodeFile.readline())
 
-    print("wrapping edges\n")
-    wrapEdge("D:\\dataset\\graph500-22")
-    with open(edgePath+"-wrapped.csv") as edgeFile:
+    print("-------start to wrap edges----------")
+    localtime2 = time.asctime(time.localtime(time.time()))
+    wrapPandaEdge(srcEdgePath)
+    with open(targetEdgePath) as edgeFile:
         print("wrapped edge file:\n")
         for i in range(10):
             print(edgeFile.readline())
+    localtime3 = time.asctime(time.localtime(time.time()))
+    print("-------end----------")
+    print(localtime1)
+    print(localtime2)
+    print(localtime3)
 
 if __name__ == '__main__':
     main()

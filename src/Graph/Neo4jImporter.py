@@ -1,15 +1,17 @@
-edgePath = "D:\\dataset\\graph500-22-wrapped.csv"
-nodePath = "D:\\dataset\\graph500-22_unique_node-wrapped.csv"
+edgePath = "D://dataset//edges-1k-wrapped.csv"
+nodePath = "D://dataset//nodes-1k-wrapped.csv"
+nodeHeadPath = "G://dataset//nodes-1k-wrapped-head.csv"
+edgeHeadPath = "G://dataset//edges-1k-wrapped-head.csv"
 neo4jRootPath = "";
 
-databaseName = "graph-501.db"
+databaseName = "graph-1B.db"
 
 
 skipBadRelationships = False
 
 neo4j_admin_bash = neo4jRootPath+"bin/neo4j-admin"
 
-cmd = "{} import --database {} --nodes {} --relationships {}".format(neo4j_admin_bash, databaseName, nodePath, edgePath)
+cmd = "{} import --database {} --nodes '{}' --nodes '{}' --relationships '{}' --relationships '{}'".format(neo4j_admin_bash, databaseName, nodeHeadPath, nodePath, edgeHeadPath, edgePath)
 
 print(cmd)
 # " bin/neo4j-admin import --nodes import/movies_header.csv,import/movies.csv \
