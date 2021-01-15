@@ -34,6 +34,6 @@ if __name__ == '__main__':
 
     allNodeFilesStr = getAllfilesAsStr(abslouteFilePath(targetNodeDir), "node")
     allRelFilesStr = getAllfilesAsStr(abslouteFilePath(targetRelDir), "relation")
-    cmd = "{} --database={} {} {} --delimiter=\"{}\" --array-delimiter=\"{}\"".format(bashName, databaseName,
+    cmd = "{} --db-path={} {} {} --delimeter=\"{}\" --array-delimeter=\"{}\"".format(bashName, databaseName,
                                                                                  allNodeFilesStr, allRelFilesStr, delimiter, array_delimiter)
     print(cmd)
