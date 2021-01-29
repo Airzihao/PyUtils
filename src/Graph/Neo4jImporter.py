@@ -4,7 +4,7 @@ import sys
 neo4jRootPath = ""
 databaseName = ""
 delimiter = "|"
-array_delimiter = ","
+array_delimiter = ";"
 skipBadRelationships = False
 
 def abslouteFilePath(path):

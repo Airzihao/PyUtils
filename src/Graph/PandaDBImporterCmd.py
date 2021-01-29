@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     bashName = "panda-admin-import"
     delimiter = "|"
-    array_delimiter = ","
+    array_delimiter = ";"
 
     allNodeFilesStr = getAllfilesAsStr(abslouteFilePath(targetNodeDir), "node")
     allRelFilesStr = getAllfilesAsStr(abslouteFilePath(targetRelDir), "relation")
